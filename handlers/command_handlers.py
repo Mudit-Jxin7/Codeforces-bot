@@ -1,13 +1,19 @@
-from models.user_model import is_verified
+import logging
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CommandHandler, ContextTypes
+
 from models.user_model import is_verified
 from services.codeforces_api import get_user_info
+
+logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     verified = await is_verified(user_id)
 
+    logger.info(f"/start triggered by user_id={user_id}, verified={verified}")
+    
     if verified:
         keyboard = [
             [
